@@ -1,0 +1,105 @@
+----------------------------------------------------------------------------------------------------------
+Line	 |	 OpCode	 |	 Operand	 |		 Location	 |	 Error	 |			 Source Line		|
+0		 0xf1		 1000    			 1000			 4		 COPY    START   1000		COPY FILE FROM INPUT TO OUTPUT
+
+1		 0x14		 RETADR  			 1000			 0		 FIRST   STL     RETADR		SAVE RETURN ADDRESS
+
+2		 0x48		 RDREC   			 1003			 0		 CLOOP   JSUB    RDREC		READ INPUT RECORD
+
+3		 0		 LENGTH  			 1006			 0		 	LDA	LENGTH		TEST FOR EOF (LENGTH = 0)
+
+4		 0x28		 ZERO    			 1009			 0		 	COMP    ZERO
+
+5		 0x30		 ENDFIL  			 100c			 0		 	JEQ     ENDFIL		EXIT IF EOF FOUND
+
+6		 0x48		 WRREC   			 100f			 0		 	JSUB	WRREC		WRITE OUTPUT RECORD
+
+7		 0x3c		 CLOOP   			 1012			 0		 	J       CLOOP		LOOP
+
+8		 0		 EOF     			 1015			 0		 ENDFIL  LDA     EOF		INSERT END OF FILE MARKER
+
+9		 0xc		 BUFFER  			 1018			 0		 	STA     BUFFER
+
+10		 0		 THREE   			 101b			 0		 	LDA     THREE		SET LENGTH = 3
+
+11		 0xc		 LENGTH  			 101e			 0		 	STA     LENGTH
+
+12		 0x48		 WRREC   			 1021			 0		 	JSUB    WRREC		WRITE EOF
+
+13		 0x8		 RETADR  			 1024			 0		 	LDL     RETADR		GET RETURN ADDRESS
+
+14		 0x4c		 RETURN  			 1027			 0		 	RSUB             	RETURN TO CALLER
+
+15		 0xf3		 C'EOF'  			 102a			 4		 EOF     BYTE    C'EOF'
+
+16		 0xf4		 3       			 102d			 4		 THREE   WORD    3
+
+17		 0xf4		 0       			 1030			 4		 ZERO    WORD    0
+
+18		 0xf6		 1       			 1033			 4		 RETADR  RESW    1
+
+19		 0xf6		 1       			 1036			 4		 LENGTH  RESW    1		LENGTH OF RECORD
+
+20		 0xf5		 4096    			 1039			 4		 BUFFER  RESB    4096		4096-BYTE BUFFER AREA
+
+21		 0x4		 ZERO    			 2039			 0		 RDREC   LDX     ZERO		CLEAR LOOP COUNTER
+
+22		 0		 ZERO    			 203c			 0		 	LDA     ZERO		CLEAR A TO ZERO
+
+23		 0xe0		 INPUT   			 203f			 0		 RLOOP   TD      INPUT		TEST INPUT DEVICE
+
+24		 0x30		 RLOOP   			 2042			 0		 	JEQ     RLOOP		LOOP UNTIL READY
+
+25		 0xd8		 INPUT   			 2045			 0		 	RD      INPUT		READ CHARACTER INTO REGISTAR A
+
+26		 0x28		 ZERO    			 2048			 0		 	COMP    ZERO		TEST FOR END OF RECORD (X'00')
+
+27		 0x30		 EXIT    			 204b			 0		 	JEQ     EXIT		EXIT LOOP IF EOF
+
+28		 0x54		 BUFFER,X			 204e			 0		 	STCH    BUFFER,X	STORE CHARCTER IN BUFFER
+
+29		 0x2c		 MAXLEN  			 2051			 0		 	TIX     MAXLEN		LOOP UNLESS MAX LENGTH
+
+30		 0x38		 RLOOP   			 2054			 0		 	JLT     RLOOP	  	  HAS BEEN REACHED
+
+31		 0x10		 LENGTH  			 2057			 0		 EXIT    STX     LENGTH		SAVE RECORD LENGTH
+
+32		 0x4c		 RETURN  			 205a			 0		 	RSUB                    RETURN TO CALLER
+
+33		 0xf3		 X'F1'   			 205d			 4		 INPUT   BYTE    X'F1'		CODE FOR INPUT DEVICE
+
+34		 0xf4		 4096    			 205e			 4		 MAXLEN	WORD	4096
+
+35		 0x4		 ZERO    			 2061			 0		 WRREC   LDX    ZERO		CLEAR LOOP COUNTER
+
+36		 0xe0		 OUTPUT  			 2064			 0		 WLOOP   TD     OUTPUT		TEST OUTPUT DEVICE
+
+37		 0x30		 WLOOP   			 2067			 0		 	JEQ    WLOOP		LOOP UNTIL READY
+
+38		 0x50		 BUFFER,X			 206a			 0		 	LDCH   BUFFER,X	        GET CHARCTER FROM BUFFER
+
+39		 0xdc		 OUTPUT  			 206d			 0		 	WD     OUTPUT		WRITE CHARACTER
+
+40		 0x2c		 LENGTH  			 2070			 0		 	TIX    LENGTH		LOOP UNTIL ALL CHARACTERS
+
+41		 0x38		 WLOOP   			 2073			 0		 	JLT    WLOOP	  	  HAVE BEEN WRITTEN
+
+42		 0x4c		 RETURN  			 2076			 0		 	RSUB                    RETURN TO CALLER
+
+43		 0xf3		 X'05'   			 2079			 4		 OUTPUT  BYTE   X'05'		CODE FOR OUTPUT DEVICE
+
+44		 0xf2		 FIRST   			 207a			 4		 	END    FIRST
+
+0		 0		         			 0			 0		 
+0		 0		         			 0			 0		 
+0		 0		         			 0			 0		 
+0		 0		         			 0			 0		 
+0		 0		         			 0			 0		 
+
+ Codes:
+----------------------------
+[0]: No Error
+[1]: Symbol Table Contains Duplicate Label.
+[2]: Error in OpCode (incorrect spelling, byte length error)
+[3]: Critical Error - Both [1] and [2] Occurred.
+[4]: Directive Found.

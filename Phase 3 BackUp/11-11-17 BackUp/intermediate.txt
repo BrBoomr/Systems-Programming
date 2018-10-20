@@ -1,0 +1,69 @@
+----------------------------------------------------------------------------------------------------------
+Line	 |	 OpCode	 |	 Operand	 |		 Location	 |	 Error	 |			 Comment		 
+1		 0XF1		 1000    			 1000			 4		 COPY FILE FROM INPUT TO OUTPUT		 
+2		 0X14		 RETADR  			 1000			 0		 SAVE RETURN ADDRESS		 
+3		 0X48		 RDREC   			 1003			 0		 READ INPUT RECORD		 
+4		 0000		 LENGTH  			 1006			 0		 TEST FOR EOF (LENGTH = 0)		 
+5		 0X28		 ZERO    			 1009			 0		 		 
+6		 0X30		 ENDFIL  			 100C			 0		 EXIT IF EOF FOUND		 
+7		 0X48		 WRREC   			 100F			 0		 WRITE OUTPUT RECORD		 
+8		 0X3C		 CLOOP   			 1012			 0		 LOOP		 
+9		 0000		 EOF     			 1015			 0		 INSERT END OF FILE MARKER		 
+10		 0X0C		 BUFFER  			 1018			 0		 		 
+11		 0000		 THREE   			 101B			 0		 SET LENGTH = 3		 
+12		 0X0C		 LENGTH  			 101E			 0		 		 
+13		 0X48		 WRREC   			 1021			 0		 WRITE EOF		 
+14		 0X08		 RETADR  			 1024			 0		 GET RETURN ADDRESS		 
+15		 0X4C		         			 1027			 0		 RETURN TO CALLER		 
+16		 0XF3		 C'EOF'  			 102A			 4		 		 
+17		 0XF4		 3       			 102D			 4		 		 
+18		 0XF4		 0       			 1030			 4		 		 
+19		 0XF6		 1       			 1033			 4		 		 
+20		 0XF6		 1       			 1036			 4		 LENGTH OF RECORD		 
+21		 0XF5		 4096    			 1039			 4		 4096-BYTE BUFFER AREA		 
+22		 0000		         			 2039			 0		 .
+		 
+23		 0000		         			 2039			 0		 .	SUBROUTINE TO READ RECORD IN		 
+24		 0000		         			 2039			 0		 .
+		 
+25		 0X04		 ZERO    			 2039			 0		 CLEAR LOOP COUNTER		 
+26		 0000		 ZERO    			 203C			 0		 CLEAR A TO ZERO		 
+27		 0XE0		 INPUT   			 203F			 0		 TEST INPUT DEVICE		 
+28		 0X30		 RLOOP   			 2042			 0		 LOOP UNTIL READY		 
+29		 0XD8		 INPUT   			 2045			 0		 READ CHARACTER INTO REGISTAR A		 
+30		 0X28		 ZERO    			 2048			 0		 TEST FOR END OF RECORD (X'00')		 
+31		 0X30		 EXIT    			 204B			 0		 EXIT LOOP IF EOF		 
+32		 0X54		 BUFFER,X			 204E			 0		 STORE CHARCTER IN BUFFER		 
+33		 0X2C		 MAXLEN  			 2051			 0		 LOOP UNLESS MAX LENGTH		 
+34		 0X38		 RLOOP   			 2054			 0		 HAS BEEN REACHED		 
+35		 0X10		 LENGTH  			 2057			 0		 SAVE RECORD LENGTH		 
+36		 0X4C		         			 205A			 0		 RETURN TO CALLER		 
+37		 0XF3		 X'F1'   			 205D			 4		 CODE FOR INPUT DEVICE		 
+38		 0XF4		 4096    			 205E			 4		 		 
+39		 0000		         			 2061			 0		 .
+		 
+40		 0000		         			 2061			 0		 .	SUBROUTINE TO WRITE RECORD F		 
+41		 0000		         			 2061			 0		 .
+		 
+42		 0X04		 ZERO    			 2061			 0		 CLEAR LOOP COUNTER		 
+43		 0XE0		 OUTPUT  			 2064			 0		 TEST OUTPUT DEVICE		 
+44		 0X30		 WLOOP   			 2067			 0		 LOOP UNTIL READY		 
+45		 0X50		 BUFFER,X			 206A			 0		 GET CHARCTER FROM BUFFER		 
+46		 0XDC		 OUTPUT  			 206D			 0		 WRITE CHARACTER		 
+47		 0X2C		 LENGTH  			 2070			 0		 LOOP UNTIL ALL CHARACTERS		 
+48		 0X38		 WLOOP   			 2073			 0		 HAVE BEEN WRITTEN		 
+49		 0X4C		         			 2076			 0		 RETURN TO CALLER		 
+50		 0XF3		 X'05'   			 2079			 4		 CODE FOR OUTPUT DEVICE		 
+51		 0XF2		 FIRST   			 207A			 4		 		 
+0		 0XFF		         			 0			 0		 		 
+0		 0XFF		         			 0			 0		 		 
+0		 0XFF		         			 0			 0		 		 
+0		 0XFF		         			 0			 0		 		 
+
+ Codes:
+----------------------------
+[0]: No Error
+[1]: Symbol Table Contains Duplicate Label.
+[2]: Error in OpCode (incorrect spelling, byte length error)
+[3]: Critical Error - Both [1] and [2] Occurred.
+[4]: Directive Found.
